@@ -5,8 +5,9 @@ import { prisma } from "@/lib/prisma"
 import * as XLSX from "xlsx"
 
 // Cấu hình để hỗ trợ upload file lớn (100MB, 100.000+ dòng)
-export const maxDuration = 600; // 10 phút timeout cho file lớn
+export const maxDuration = 300; // 5 phút timeout (Vercel hobby plan limit)
 export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
   try {
