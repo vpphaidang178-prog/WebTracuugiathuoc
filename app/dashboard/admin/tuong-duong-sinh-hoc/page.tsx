@@ -78,9 +78,22 @@ export default function QuanLyTuongDuongSinhHocPage() {
         body: formData,
       });
 
-      const result = await res.json();
+      // Check if response is JSON
+      let result;
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        result = await res.json();
+      } else {
+        // If not JSON, try to get text
+        const text = await res.text();
+        result = { error: text || 'Lỗi không xác định' };
+      }
 
       if (!res.ok) {
+        // Handle specific error cases
+        if (res.status === 401 || res.status === 403) {
+          throw new Error('Bạn không có quyền thực hiện thao tác này. Vui lòng đăng nhập lại.');
+        }
         throw new Error(result.error || 'Lỗi khi import dữ liệu');
       }
 
@@ -142,9 +155,20 @@ export default function QuanLyTuongDuongSinhHocPage() {
         method: 'DELETE',
       });
 
-      const result = await res.json();
+      // Check if response is JSON
+      let result;
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        result = await res.json();
+      } else {
+        const text = await res.text();
+        result = { error: text || 'Lỗi không xác định' };
+      }
 
       if (!res.ok) {
+        if (res.status === 401 || res.status === 403) {
+          throw new Error('Bạn không có quyền thực hiện thao tác này. Vui lòng đăng nhập lại.');
+        }
         throw new Error(result.error || 'Lỗi khi xóa dữ liệu');
       }
 
@@ -193,9 +217,20 @@ export default function QuanLyTuongDuongSinhHocPage() {
         }),
       });
 
-      const result = await res.json();
+      // Check if response is JSON
+      let result;
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        result = await res.json();
+      } else {
+        const text = await res.text();
+        result = { error: text || 'Lỗi không xác định' };
+      }
 
       if (!res.ok) {
+        if (res.status === 401 || res.status === 403) {
+          throw new Error('Bạn không có quyền thực hiện thao tác này. Vui lòng đăng nhập lại.');
+        }
         throw new Error(result.error || 'Lỗi khi lưu cấu hình');
       }
 

@@ -48,10 +48,27 @@ export default function UsersPage() {
   const fetchUsers = async () => {
     try {
       const res = await fetch("/api/users");
-      const data = await res.json();
+      
+      // Check if response is JSON
+      let data;
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        data = await res.json();
+      } else {
+        throw new Error('Lỗi khi tải danh sách người dùng');
+      }
+      
+      if (!res.ok) {
+        if (res.status === 401 || res.status === 403) {
+          alert('Bạn không có quyền truy cập. Vui lòng đăng nhập lại.');
+          return;
+        }
+        throw new Error(data.error || 'Lỗi khi tải danh sách người dùng');
+      }
+      
       setUsers(data);
-    } catch (error) {
-      alert("Lỗi khi tải danh sách người dùng");
+    } catch (error: any) {
+      alert(error.message || "Lỗi khi tải danh sách người dùng");
     } finally {
       setLoading(false);
     }
@@ -70,9 +87,21 @@ export default function UsersPage() {
         body: JSON.stringify(formData),
       });
 
+      // Check if response is JSON
+      let result;
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        result = await res.json();
+      } else {
+        const text = await res.text();
+        result = { error: text || 'Lỗi không xác định' };
+      }
+
       if (!res.ok) {
-        const error = await res.json();
-        throw new Error(error.error);
+        if (res.status === 401 || res.status === 403) {
+          throw new Error('Bạn không có quyền thực hiện thao tác này. Vui lòng đăng nhập lại.');
+        }
+        throw new Error(result.error || 'Lỗi khi lưu người dùng');
       }
 
       setShowModal(false);
@@ -124,8 +153,21 @@ export default function UsersPage() {
         method: "DELETE",
       });
 
+      // Check if response is JSON
+      let result;
+      const contentType = res.headers.get('content-type');
+      if (contentType && contentType.includes('application/json')) {
+        result = await res.json();
+      } else if (!res.ok) {
+        const text = await res.text();
+        result = { error: text || 'Lỗi không xác định' };
+      }
+
       if (!res.ok) {
-        throw new Error("Lỗi khi xóa người dùng");
+        if (res.status === 401 || res.status === 403) {
+          throw new Error('Bạn không có quyền thực hiện thao tác này. Vui lòng đăng nhập lại.');
+        }
+        throw new Error(result?.error || "Lỗi khi xóa người dùng");
       }
 
       fetchUsers();
