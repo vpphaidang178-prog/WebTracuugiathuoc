@@ -52,6 +52,7 @@ export const authOptions: NextAuthOptions = {
   ],
   callbacks: {
     async jwt({ token, user, trigger }) {
+      // Khi user mới đăng nhập
       if (user) {
         return {
           ...token,
@@ -60,6 +61,31 @@ export const authOptions: NextAuthOptions = {
           isAdmin: (user as any).isAdmin,
         } as any
       }
+      
+      // Refresh token từ database để đảm bảo isAdmin luôn đúng
+      // Đặc biệt quan trọng khi deploy production với NEXTAUTH_SECRET khác
+      if (token.id) {
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { id: token.id as string },
+            select: { isAdmin: true, status: true }
+          })
+          
+          if (dbUser) {
+            // Cập nhật isAdmin từ database
+            token.isAdmin = dbUser.isAdmin
+            
+            // Kiểm tra trạng thái tài khoản
+            if (!dbUser.status) {
+              // Invalidate token nếu tài khoản bị khóa
+              return null as any
+            }
+          }
+        } catch (error) {
+          console.error('Error refreshing token from database:', error)
+        }
+      }
+      
       return token
     },
     async session({ session, token }) {
