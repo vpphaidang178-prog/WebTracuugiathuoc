@@ -1,0 +1,15 @@
+Xây dựng phần mềm tra cứu giá trúng thầu với các nền tảng: 
+- Frontend: React.js
+- Backend: Next.js
+- Database: PostgreSQL
+- Xác thực NextAuth
+Cầu trúc web app như sau: 
+- Trang đăng nhập/Đăng xuất
+- Item Quản trị (admin) gồm:
++ Dropdown 1: Quản lý người dùng (Thêm/Sửa/xóa) các cột: Tên đăng nhập, Mật khẩu, Đơn vị, Số điện thoại, Địa chỉ liên hệ
+- Item Thuốc gồm 02 dropdown
++ Dropdown 1: Giá trúng thầu theo VSS
+Hiển thị Bảng danh mục thuốc tra cứu gồm các cột sau: Chọn (checkbox), STT (text), Tên thuốc (text), Hoạt chất (text), Hàm lượng (text), GĐKLH (text), Đường dùng (text), Dạng bào chế (text), Tên cơ sở sản xuất (text), Nước sản xuất (text), Quy cách đóng gói (text), Đơn vị tính (text), Số lượng (text), Đơn giá (text), Nhóm thuốc (text), Tên đơn vị trúng thầu (text), Tỉnh (text), Tên nhà thầu (text), Số quyết định (text), Ngày công bố, Loại thuốc (text), Mã TT (text), Mã Đường dùng (text) 
++ Dropdown 2: Giá trúng thầu theo MSC
+Hiển thị Bảng danh mục thuốc tra cứu gồm các cột sau: Chọn (checkbox), STT (text), Tên thuốc (text), Hoạt chất (text), Hàm lượng (text), GĐKLH (text), Đường dùng (text), Dạng bào chế (text), Hạn dùng (text), Tên cơ sở sản xuất (text), Nước sản xuất (text), Quy cách đóng gói (text), Đơn vị tính (text), Số lượng (text), Đơn giá (text), Nhóm thuốc (text), Mã TBMT (text), Tên Chủ đầu tư (text), Hình thức LCNT (text), Ngày đăng tải, Số quyết định (text), Ngày ban hành quyết định, Số nhà thầu tham dự (text), Địa điểm (text)
+Hãy bắt đầu hoàn thiện webapp trên, tôi đã tạo database bằng pgAdmin 4 (tên database: giathuoctrungthau_db; mật khẩu: 123456)

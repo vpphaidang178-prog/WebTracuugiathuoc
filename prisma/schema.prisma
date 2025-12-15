@@ -1,0 +1,147 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String    @id @default(uuid())
+  username    String    @unique
+  password    String
+  fullName    String?   @map("ho_va_ten")
+  phone       String?   @map("so_dien_thoai")
+  status      Boolean   @default(true) @map("trang_thai")
+  createdAt   DateTime  @default(now()) @map("ngay_tao_tai_khoan")
+  expiryDate  DateTime? @map("ngay_het_han")
+  zaloName    String?   @map("ten_zalo")
+  notes       String?   @map("ghi_chu")
+  isAdmin     Boolean   @default(false) @map("is_admin")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+
+  importHistories ImportHistory[]
+
+  @@map("users")
+}
+
+model ThuocVSS {
+  id                    String   @id @default(uuid())
+  tenThuoc              String   @map("ten_thuoc")
+  hoatChat              String?  @map("hoat_chat")
+  hamLuong              String?  @map("ham_luong")
+  gdklh                 String?
+  duongDung             String?  @map("duong_dung")
+  dangBaoChe            String?  @map("dang_bao_che")
+  tenCoSoSanXuat        String?  @map("ten_co_so_san_xuat")
+  nuocSanXuat           String?  @map("nuoc_san_xuat")
+  quyCachDongGoi        String?  @map("quy_cach_dong_goi")
+  donViTinh             String?  @map("don_vi_tinh")
+  soLuong               String?  @map("so_luong")
+  donGia                String?  @map("don_gia")
+  nhomThuoc             String?  @map("nhom_thuoc")
+  tenDonViTrungThau     String?  @map("ten_don_vi_trung_thau")
+  tinh                  String?
+  tenNhaThau            String?  @map("ten_nha_thau")
+  soQuyetDinh           String?  @map("so_quyet_dinh")
+  ngayCongBo            DateTime? @map("ngay_cong_bo")
+  loaiThuoc             String?  @map("loai_thuoc")
+  maTT                  String?  @map("ma_tt")
+  maDuongDung           String?  @map("ma_duong_dung")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  @@map("thuoc_vss")
+}
+
+model ThuocMSC {
+  id                    String    @id @default(uuid())
+  tenThuoc              String    @map("ten_thuoc")
+  hoatChat              String?   @map("hoat_chat")
+  hamLuong              String?   @map("ham_luong")
+  gdklh                 String?
+  duongDung             String?   @map("duong_dung")
+  dangBaoChe            String?   @map("dang_bao_che")
+  hanDung               String?   @map("han_dung")
+  tenCoSoSanXuat        String?   @map("ten_co_so_san_xuat")
+  nuocSanXuat           String?   @map("nuoc_san_xuat")
+  quyCachDongGoi        String?   @map("quy_cach_dong_goi")
+  donViTinh             String?   @map("don_vi_tinh")
+  soLuong               String?   @map("so_luong")
+  donGia                String?   @map("don_gia")
+  nhomThuoc             String?   @map("nhom_thuoc")
+  maTBMT                String?   @map("ma_tbmt")
+  tenChuDauTu           String?   @map("ten_chu_dau_tu")
+  hinhThucLCNT          String?   @map("hinh_thuc_lcnt")
+  ngayDangTai           DateTime? @map("ngay_dang_tai")
+  soQuyetDinh           String?   @map("so_quyet_dinh")
+  ngayBanHanhQuyetDinh  DateTime? @map("ngay_ban_hanh_quyet_dinh")
+  soNhaThauThamDu       String?   @map("so_nha_thau_tham_du")
+  diaDiem               String?   @map("dia_diem")
+  createdAt             DateTime  @default(now()) @map("created_at")
+  updatedAt             DateTime  @updatedAt @map("updated_at")
+
+  @@map("thuoc_msc")
+}
+
+model ImportHistory {
+  id            String   @id @default(uuid())
+  type          String   // "VSS" or "MSC"
+  fileName      String   @map("file_name")
+  totalRecords  Int      @map("total_records")
+  successCount  Int      @map("success_count")
+  failedCount   Int      @map("failed_count")
+  errors        String?  @db.Text // JSON string of error details
+  importedBy    String   @map("imported_by")
+  user          User     @relation(fields: [importedBy], references: [id])
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@map("import_history")
+}
+
+model ColumnConfig {
+  id          String   @id @default(uuid())
+  type        String   // "VSS" or "MSC"
+  columnKey   String   @map("column_key")
+  displayName String   @map("display_name")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@unique([type, columnKey])
+  @@map("column_config")
+}
+
+model TuongDuongSinhHoc {
+  id                    String   @id @default(uuid())
+  tenThuoc              String   @map("ten_thuoc")
+  hamLuong              String?  @map("ham_luong")
+  dangBaoChe            String?  @map("dang_bao_che")
+  quyCachDongGoi        String?  @map("quy_cach_dong_goi")
+  soDangKy              String?  @map("so_dang_ky")
+  tenCoSoSanXuat        String?  @map("ten_co_so_san_xuat")
+  diaChiCoSoSanXuat     String?  @map("dia_chi_co_so_san_xuat")
+  ghiChu                String?  @map("ghi_chu")
+  soQuyetDinh           String?  @map("so_quyet_dinh")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  @@map("tuong_duong_sinh_hoc")
+}
+
+model BietDuocGoc {
+  id                    String   @id @default(uuid())
+  tenThuoc              String   @map("ten_thuoc")
+  hamLuong              String?  @map("ham_luong")
+  dangBaoCheQuyCach     String?  @map("dang_bao_che_quy_cach")
+  soDangKy              String?  @map("so_dang_ky")
+  tenCoSoSanXuat        String?  @map("ten_co_so_san_xuat")
+  diaChiCoSoSanXuat     String?  @map("dia_chi_co_so_san_xuat")
+  ghiChu                String?  @map("ghi_chu")
+  soQuyetDinh           String?  @map("so_quyet_dinh")
+  createdAt             DateTime @default(now()) @map("created_at")
+  updatedAt             DateTime @updatedAt @map("updated_at")
+
+  @@map("biet_duoc_goc")
+}
+
