@@ -98,6 +98,16 @@ Sau khi chạy seed, bạn có thể đăng nhập với:
 └── public/                    # Static files
 ```
 
+## Tính năng nổi bật
+
+### ⚡ Import Excel tối ưu cho file lớn
+- **Hỗ trợ 100,000+ dòng** trong một file Excel
+- **Batch insert** - Tăng tốc 10-30 lần so với insert từng record
+- **Two-phase processing** - Parse và validate trước, sau đó batch insert
+- **Thời gian xử lý**: 2-5 phút cho 100,000 dòng (thay vì 30-60 phút)
+- **Error handling** thông minh - Lưu tới 100 lỗi chi tiết
+- Xem chi tiết tại [IMPORT_OPTIMIZATION.md](./IMPORT_OPTIMIZATION.md)
+
 ## Tính năng
 
 ### 1. Xác thực người dùng
